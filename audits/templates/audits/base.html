@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}SEO Audit Tool{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="h-full bg-slate-50 text-slate-900 antialiased">
+
+  <header class="border-b border-slate-200 bg-white">
+    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-4">
+      <a href="{% url 'audits:index' %}" class="flex shrink-0 items-center gap-2 font-medium text-slate-900">
+        <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </span>
+        SEO Audit Tool
+      </a>
+
+      <form action="{% url 'audits:analyze' %}" method="post" class="flex min-w-[260px] flex-1 max-w-xl gap-2">
+        {% csrf_token %}
+        {{ form.url }}
+        <button type="submit" class="shrink-0 rounded-md bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-500">
+          Analyze
+        </button>
+      </form>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-6xl px-6 py-10">
+    {% block content %}{% endblock %}
+  </main>
+
+  <script src="{% static 'audits/js/analyze.js' %}"></script>
+</body>
+</html>

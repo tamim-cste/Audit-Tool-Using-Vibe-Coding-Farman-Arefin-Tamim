@@ -1,0 +1,133 @@
+{% extends "audits/base.html" %}
+
+{% block title %}Report for {{ audit.final_url|default:audit.submitted_url }} — SEO audit tool{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+
+  <div class="grid gap-6 md:grid-cols-2">
+
+    {# ---------------- Summary card ---------------- #}
+    <section class="rounded-xl border border-slate-200 bg-white p-6">
+      <p class="mb-4 text-sm text-slate-500">Overall score</p>
+      <div class="flex flex-wrap items-center gap-6">
+        <div class="relative flex h-28 w-28 shrink-0 items-center justify-center rounded-full"
+             style="background: conic-gradient({{ audit.score_color }} 0% {{ audit.overall_score }}%, #e2e8f0 {{ audit.overall_score }}% 100%);">
+          <div class="flex h-20 w-20 flex-col items-center justify-center rounded-full bg-white">
+            <span class="text-2xl font-semibold">{{ audit.overall_score }}</span>
+            <span class="text-xs text-slate-400">/ 100</span>
+          </div>
+        </div>
+        <div class="space-y-2 text-sm">
+          <div class="flex items-center gap-2">
+            <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+            <span>{{ audit.passed_count }} passed</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="h-2.5 w-2.5 rounded-full bg-amber-500"></span>
+            <span>{{ audit.warning_count }} warnings</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="h-2.5 w-2.5 rounded-full bg-rose-500"></span>
+            <span>{{ audit.error_count }} errors</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {# ---------------- Page information card ---------------- #}
+    <section class="rounded-xl border border-slate-200 bg-white p-6">
+      <p class="mb-4 text-sm text-slate-500">Page information</p>
+      <div class="flex gap-4">
+        <div class="h-20 w-28 shrink-0 overflow-hidden rounded-lg border border-slate-200 bg-slate-100">
+          {% if audit.screenshot %}
+            <img src="{{ audit.screenshot.url }}" alt="Screenshot of {{ audit.final_url }}" class="h-full w-full object-cover object-top">
+          {% else %}
+            <div class="flex h-full items-center justify-center text-center text-xs text-slate-400">No screenshot</div>
+          {% endif %}
+        </div>
+        <div class="min-w-0">
+          <p class="truncate text-sm font-medium">{{ audit.title|default:"Untitled page" }}</p>
+          <a href="{{ audit.final_url }}" target="_blank" rel="noopener noreferrer" class="block truncate text-xs text-indigo-600 hover:underline">
+            {{ audit.final_url }}
+          </a>
+          <p class="mt-1 line-clamp-2 text-xs text-slate-500">
+            {{ audit.meta_description|default:"No meta description found." }}
+          </p>
+        </div>
+      </div>
+      <dl class="mt-4 grid grid-cols-2 gap-y-2 border-t border-slate-100 pt-4 text-xs">
+        <dt class="text-slate-500">HTTP status</dt><dd>{{ audit.http_status_code|default:"—" }}</dd>
+        <dt class="text-slate-500">Language</dt><dd>{{ audit.lang|default:"—" }}</dd>
+        <dt class="text-slate-500">Word count</dt><dd>{{ audit.word_count }}</dd>
+        <dt class="text-slate-500">Response time</dt><dd>{{ audit.page_load_time_ms|default:"—" }} ms</dd>
+      </dl>
+      {% if audit.submitted_url != audit.final_url %}
+      <p class="mt-3 rounded-md bg-slate-50 p-2 text-xs text-slate-500">
+        Redirected from <span class="font-medium">{{ audit.submitted_url }}</span>
+      </p>
+      {% endif %}
+    </section>
+  </div>
+
+  {# ---------------- Issues table ---------------- #}
+  <section class="rounded-xl border border-slate-200 bg-white p-6">
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+      <p class="text-sm text-slate-500">SEO issues ({{ issues|length }})</p>
+      <div class="flex flex-wrap gap-2" id="issue-filters">
+        <button type="button" data-filter="all" class="filter-btn rounded-md border border-slate-200 bg-slate-900 px-3 py-1.5 text-xs font-medium text-white">All</button>
+        <button type="button" data-filter="fail" class="filter-btn rounded-md border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600">Errors</button>
+        <button type="button" data-filter="warning" class="filter-btn rounded-md border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600">Warnings</button>
+        <button type="button" data-filter="pass" class="filter-btn rounded-md border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600">Passed</button>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full min-w-[720px] text-left text-sm">
+        <thead>
+          <tr class="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-400">
+            <th class="py-2 pr-3 font-medium">Status</th>
+            <th class="py-2 pr-3 font-medium">Issue</th>
+            <th class="py-2 pr-3 font-medium">Value</th>
+            <th class="py-2 pr-3 font-medium">Recommendation</th>
+            <th class="py-2 pr-3 font-medium">Severity</th>
+          </tr>
+        </thead>
+        <tbody id="issue-rows">
+          {% for issue in issues %}
+          <tr class="issue-row border-b border-slate-100 align-top" data-status="{{ issue.status }}">
+            <td class="py-3 pr-3">
+              {% if issue.status == "pass" %}
+                <span class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">Pass</span>
+              {% elif issue.status == "warning" %}
+                <span class="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700">Warning</span>
+              {% else %}
+                <span class="inline-flex items-center rounded-full bg-rose-50 px-2.5 py-1 text-xs font-medium text-rose-700">Fail</span>
+              {% endif %}
+            </td>
+            <td class="py-3 pr-3">
+              <p class="font-medium text-slate-800">{{ issue.title }}</p>
+              <p class="mt-0.5 max-w-sm text-xs text-slate-500">{{ issue.description }}</p>
+              {% if issue.affected_element %}
+                <code class="mt-1 inline-block max-w-sm truncate rounded bg-slate-100 px-1.5 py-0.5 text-[11px] text-slate-500">{{ issue.affected_element }}</code>
+              {% endif %}
+            </td>
+            <td class="max-w-xs py-3 pr-3 text-xs text-slate-600">{{ issue.current_value|default:"—" }}</td>
+            <td class="max-w-xs py-3 pr-3 text-xs text-slate-600">{{ issue.recommendation }}</td>
+            <td class="py-3 pr-3">
+              {% if issue.severity == "critical" %}
+                <span class="inline-flex items-center rounded-full bg-rose-50 px-2.5 py-1 text-xs font-medium text-rose-700">Critical</span>
+              {% elif issue.severity == "warning" %}
+                <span class="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700">Warning</span>
+              {% else %}
+                <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">Info</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+{% endblock %}
