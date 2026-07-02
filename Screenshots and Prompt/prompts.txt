@@ -1,4 +1,4 @@
-You are an experienced Senior Full Stack Engineer, UI/UX Designer, and Software Architect.I want you to build a modern Single Page SEO Audit Tool.This is NOT a full website crawler.The application should analyze ONLY the exact URL submitted by the user.It shouldn't crawl any nested pages,follow internal links, crawl the sitemap, recursively visit other pages. It will only fetch and analyze the HTML of the submitted URL. The crawler should use playwright for crawling.
+1. You are an experienced Senior Full Stack Engineer, UI/UX Designer, and Software Architect.I want you to build a modern Single Page SEO Audit Tool.This is NOT a full website crawler.The application should analyze ONLY the exact URL submitted by the user.It shouldn't crawl any nested pages,follow internal links, crawl the sitemap, recursively visit other pages. It will only fetch and analyze the HTML of the submitted URL. The crawler should use playwright for crawling.
 Now I give you the project goal and please give me the architecture first.
 /*-----Project Goal------*/
 The user pastes an URL into a search box.
@@ -27,7 +27,7 @@ First create the complete software architecture, folder structure, module respon
 
 
 
-Now I give you the Report UI , Functional requirements and others criteria.
+2. Now I give you the Report UI , Functional requirements and others criteria.
 
 /*------------Report UI-------------------*/
 Create a polished professional dashboard.
@@ -66,7 +66,7 @@ Language
 Word Count
 Response Time
 
-/*-----Functional Requirements-----*/
+3. /*-----Functional Requirements-----*/
 The application must be able to analyze any publicly accessible website by auditing ONLY the exact URL submitted by the user. The application must NOT crawl nested pages, follow internal links, or perform website-wide crawling. 
 The SEO audit should include (but is not limited to):
 Page title 
@@ -112,10 +112,12 @@ Severity:
 - Info
 
 
-Please don't overengineer it as your previous plan mentioned such overengineering. The project shouldn't have any authentication, user accounts, background workers, queues, celery, redis, postgresql. It shouldn't do any recursive crawling, sitemap crawling, website-wide crawling. It should analyze only one page.
+Please don't overengineer it as your previous plan mentioned such overengineering. 
+The project shouldn't have any authentication, user accounts, background workers, queues, celery, redis, postgresql. 
+It shouldn't do any recursive crawling, sitemap crawling, website-wide crawling. It should analyze only one page.
 
 
-/*---------------Playwrite Requirements---------------*/
+4. /*---------------Playwrite Requirements---------------*/
 
 Use Playwright to load the submitted URL.
 Wait until the page is fully rendered.
@@ -127,6 +129,6 @@ Do not scroll infinitely.
 Do not open new tabs.
 Analyze exactly one page.
 
-Please give real data instead of mock data. Now generate the entire project and zipped it.
+6. Please give real data instead of mock data. Now generate the entire project and zipped it.
 
-Now build the project and assist me how can I run it on my local machine?
+7. Now build the project and assist me how can I run it on my local machine?
