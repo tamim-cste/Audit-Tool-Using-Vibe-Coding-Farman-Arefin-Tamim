@@ -128,3 +128,5 @@ Do not open new tabs.
 Analyze exactly one page.
 
 Please give real data instead of mock data. Now generate the entire project and zipped it.
+
+Now build the project and assist me how can I run it on my local machine?
