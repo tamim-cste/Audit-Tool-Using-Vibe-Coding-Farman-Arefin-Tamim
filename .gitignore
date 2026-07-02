@@ -3,5 +3,5 @@ __pycache__/
 *.pyc
 db.sqlite3
 media/screenshots/*.png
-!media/screenshots/.gitkeep
+media/screenshots/.gitkeep
 .env

@@ -1,0 +1,130 @@
+You are an experienced Senior Full Stack Engineer, UI/UX Designer, and Software Architect.I want you to build a modern Single Page SEO Audit Tool.This is NOT a full website crawler.The application should analyze ONLY the exact URL submitted by the user.It shouldn't crawl any nested pages,follow internal links, crawl the sitemap, recursively visit other pages. It will only fetch and analyze the HTML of the submitted URL. The crawler should use playwright for crawling.
+Now I give you the project goal and please give me the architecture first.
+/*-----Project Goal------*/
+The user pastes an URL into a search box.
+Example: https://rentbyowner.com
+When the user clicks the "Analyze" button:
+1. Launch Playwright.
+2. Open only that page.
+3. Wait until the page is fully loaded.
+4. Extract the final rendered HTML.
+5. Run SEO analysis.
+6. Display a beautiful SEO report dashboard.
+The application must never visit any other page.
+
+/*-------Tech Stack-------*/
+Frontend: Tailwind CSS, Vanilla JavaScript
+Backend:  Django , Django Templates
+Crawler: Playwright
+HTML Parsing: BeautifulSoup, lxml
+Database: SQLite
+
+Do not write any code yet.
+First create the complete software architecture, folder structure, module responsibilities, data flow, and implementation plan.
+
+
+
+
+
+
+Now I give you the Report UI , Functional requirements and others criteria.
+
+/*------------Report UI-------------------*/
+Create a polished professional dashboard.
+The design should look similar to professional SEO tools like:
+Seobility,  Semrush or Sitechecker. 
+
+The layout should include:
+Top Navigation with logo but not any navlinks
+SEO Audit Tool
+Search Box
+Analyze Button
+
+Summary Card: 
+Large Circular SEO Score
+Overall Score (0-100)
+Number of Passed Checks
+Warnings
+Errors
+
+SEO Issues Table: 
+Columns:
+Status
+Issue
+Value
+Recommendation
+Severity
+
+
+Page Information Card:
+Page Screenshot
+URL
+Title
+Meta Description
+HTTP Status
+Language
+Word Count
+Response Time
+
+/*-----Functional Requirements-----*/
+The application must be able to analyze any publicly accessible website by auditing ONLY the exact URL submitted by the user. The application must NOT crawl nested pages, follow internal links, or perform website-wide crawling. 
+The SEO audit should include (but is not limited to):
+Page title 
+Meta description 
+Heading hierarchy (H1–H6) 
+Image alt attributes
+Canonical URL 
+Robots meta tag 
+Open Graph metadata 
+Twitter Card metadata 
+Structured data (Schema.org) 
+Internal and external links Broken links (optional) 
+Accessibility checks related to SEO 
+Performance metrics related to SEO 
+Lighthouse SEO best practices 
+
+The audit results must be displayed in a modern dashboard.
+Each audit item must include:
+✔ Status
+(Pass / Warning / Fail)
+✔ Description
+Explain what was detected.
+✔ Current Value
+Show the detected value.
+✔ Affected Element
+Show the HTML element, selector, or relevant location whenever possible.
+Examples:
+<title>
+<meta name="description">
+<h1>
+<img>
+<link rel="canonical">
+✔ Recommendation
+Provide a clear actionable recommendation explaining how to fix the issue.
+Example:
+Issue:
+Meta description missing.
+Recommendation:
+Add a unique meta description between 150–160 characters.
+Severity:
+- Critical
+- Warning
+- Info
+
+
+Please don't overengineer it as your previous plan mentioned such overengineering. The project shouldn't have any authentication, user accounts, background workers, queues, celery, redis, postgresql. It shouldn't do any recursive crawling, sitemap crawling, website-wide crawling. It should analyze only one page.
+
+
+/*---------------Playwrite Requirements---------------*/
+
+Use Playwright to load the submitted URL.
+Wait until the page is fully rendered.
+Extract the final DOM after JavaScript execution.
+Run every SEO audit against the rendered HTML, not the raw source code.
+Do not navigate away from the submitted page.
+Do not click any links.
+Do not scroll infinitely.
+Do not open new tabs.
+Analyze exactly one page.
+
+Please give real data instead of mock data. Now generate the entire project and zipped it.
